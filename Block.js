@@ -12,20 +12,46 @@ class Block {
     } 
     validate() {
         let self = this;
+        console.log(`self Hash avant:${self.hash}`);
         return new Promise((resolve, reject) => {
             const currentBlockHash=self.hash ; 
             self.hash=null;  
              // Recalculate the hash of the Block
-             const R_hash=SHA256(JSON.stringify(currentBlockHash)).toString;
-           
+             const Rhash=SHA256(JSON.stringify(self)).toString;
+             console.log(`self self : ${self}`);
+             self.hash=currentBlockHash;
              console.log(`self Hash: ${self.hash}`);// to diplay the self hash
-             console.log(`R Hash: ${R_hash}`);//to display the recalculated hash of the block              
-             if (R_hash!== self.hash){reject(false);}
+             console.log(`R Hash: ${Rhash}`);//to display the recalculated hash of the block              
+             if (Rhash!== currentBlockHash){reject(false);}
             else{
                 // Returning the Block is valid
                 resolve(true);}
             });
    }
+
+   getBData() {
+    // Getting the encoded data saved in the Block
+    let self=this;
+    return new Promise(async (resolve, reject) => {
+        if (self.height == 0) {
+            resolve(" **Genesis block **");
+        }
+       let encoded_data=self.body;
+       console.log(`data object: ${encoded_data}`);
+    // Decoding the data to retrieve the JSON representation of the object
+       let decoded_data = hex2ascii(encoded_data);
+            // Parse the data to an object to be retrieve.
+            let dataobject = JSON.parse(decoded_data);
+            // Resolve with the data if the object isn't the Genesis block
+            console.log(`data object: ${dataobject}`);
+            if (dataobject) {
+                resolve(dataobject);
+            } else {
+                reject(Error("no data in the block"));
+            }
+        });
+  
+}
 
 }
 
