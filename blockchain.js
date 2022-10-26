@@ -222,16 +222,24 @@ class Blockchain {
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
             self.chain.forEach(async(block)=> {
+              /*  if (block.height > 0){
             let prevBlock=self.chain[block.height-1];
             console.log(`previous block is :${prevBlock}`);
             console.log(`this block  :${block}`);
+        }*/
             if (await block.validate()===false)
             errorLog.push(block);
             if (block.height > 0 && block.previousBlockHash !== self.chain[block.height - 1].hash)
-             { errorLog.push(block);}
+             {
+                console.log(`block.previousBlockHash: ${block.previousBlockHash}`);
+                console.log(`self.chain[block.height - 1].hash: ${self.chain[block.height - 1].hash}`);
+                errorLog.push(block);}
             });
+            resolve(errorLog);
         });
     }
 }
+
+module.exports.Blockchain = Blockchain;  
 
 module.exports.Blockchain = Blockchain;   
