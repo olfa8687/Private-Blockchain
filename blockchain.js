@@ -242,4 +242,4 @@ class Blockchain {
 
 module.exports.Blockchain = Blockchain;  
 
-module.exports.Blockchain = Blockchain;   
+
