@@ -1,6 +1,5 @@
 const SHA256 = require('crypto-js/sha256');
 const hex2ascii = require('hex2ascii');
-
 class Block {
     // Constructor - argument data will be the object containing the transaction data
 	constructor(data){
@@ -17,12 +16,12 @@ class Block {
             const currentBlockHash=self.hash ; 
             self.hash=null;  
              // Recalculate the hash of the Block
-             const Rhash=SHA256(JSON.stringify(self)).toString;
-             console.log(`self self : ${self}`);
+             const Rhash=SHA256(JSON.stringify(self)).toString();
              self.hash=currentBlockHash;
-             console.log(`self Hash: ${self.hash}`);// to diplay the self hash
+             //console.log(`self Hash: ${self.hash}`);// to diplay the self hash
              console.log(`R Hash: ${Rhash}`);//to display the recalculated hash of the block              
-             if (Rhash!== currentBlockHash){reject(false);}
+             if (Rhash!== currentBlockHash)
+             {reject(false);}
             else{
                 // Returning the Block is valid
                 resolve(true);}
@@ -34,7 +33,7 @@ class Block {
     let self=this;
     return new Promise(async (resolve, reject) => {
         if (self.height == 0) {
-            resolve(" **Genesis block **");
+            resolve(" ** Genesis block **");
         }
        let encoded_data=self.body;
        console.log(`data object: ${encoded_data}`);
@@ -55,4 +54,5 @@ class Block {
 
 }
 
-module.exports.Block = Block;                    // Exposing the Block class as a module
+
+module.exports.Block = Block;     // Exposing the Block class as a module
