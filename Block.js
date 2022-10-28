@@ -52,7 +52,7 @@ class Block {
   
 }
 
-}
+} 
 
 
 module.exports.Block = Block;     // Exposing the Block class as a module
