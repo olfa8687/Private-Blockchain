@@ -65,7 +65,7 @@ class Blockchain {
      * Note: the symbol `_` in the method name indicates in the javascript convention 
      * that this method is a private method. 
      */
-    _addBlock(block) {
+   /* _addBlock(block) {
         let self = this;
         
         return new Promise(async (resolve, reject) => {
@@ -84,6 +84,38 @@ class Blockchain {
             this.chain.push(block);
             this.height=self.chain.length;
             console.log(`block.height end :${self.chain.length}`);
+
+        });
+    }*/
+
+    _addBlock(block) {
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                block.time = new Date().getTime().toString().slice(0, -3);
+                block.hash = SHA256(JSON.stringify(block)).toString();
+                block.height = this.chain.length;
+                console.log('before height is');
+                console.log(block.height);
+                if (this.height === -1) {
+                    block.previousBlockHash = null;
+                    resolve(block);
+                } else {
+                    block.previousBlockHash = this.chain[this.chain.length - 1].hash;
+                 resolve(block);
+                }
+                            
+              //  let errorList = await this.blockchain.validateChain();
+           
+                this.chain.push(block);
+                this.height = this.chain.length;
+                console.log('new height is');
+                console.log(this.height);
+           
+              
+            } catch {
+                reject('Error');
+            }
 
         });
     }
@@ -125,7 +157,7 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
            let time= parseInt(message.split(':')[1]);
             let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
-            if(currentTime-time<3000)
+            if(currentTime-time<(5 * 60000))
             {if(bitcoinMessage.verify(message, address, signature))
                 {
                     const data={owner:address, star:star}
@@ -202,7 +234,7 @@ class Blockchain {
         return new Promise((resolve, reject) => {
             this.chain.forEach(async (block) => {
                const blockData = await block.getBData();
-          if (blockData && blockData.owner === address) 
+          if (blockData.owner === address) 
                  stars.push(blockData);
              }) 
              resolve(stars);
@@ -228,7 +260,10 @@ class Blockchain {
             console.log(`this block  :${block}`);
         }*/
             if (await block.validate()===false)
-            errorLog.push(block);
+            {  console.log("bbbbbbbbb");
+                 errorLog.push(block);
+               
+            }
             if (block.height > 0 && block.previousBlockHash !== self.chain[block.height - 1].hash)
              {
                 console.log(`block.previousBlockHash: ${block.previousBlockHash}`);
@@ -240,6 +275,6 @@ class Blockchain {
     }
 }
 
-module.exports.Blockchain = Blockchain;  
+module.exports.Blockchain = Blockchain;   
 
 
